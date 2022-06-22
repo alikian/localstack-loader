@@ -16,7 +16,6 @@ functionality to spring boot:
 - During the App Shutdown Spring Docker Loader container will do followings:
     - Stop container
 
-![Diagram](SpringDockerLoader.png)
 ## configuration example:
 
 ```yaml
@@ -37,9 +36,9 @@ dockerloader:
     endpoint: "http://localhost:4566"
     resources:
       sqs:
-        - adyen-vendor-notification
+        - sqs-notification
       sns:
-        - adyen-payment-gateway-south
+        - sns-notification
       secretsManager:
         - name: adyen-payment-gateway
           keyValues:
