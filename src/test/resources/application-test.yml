@@ -1,0 +1,82 @@
+localStack:
+  enabled: true
+  containerRebuild: true
+  environment:
+    SERVICES: sqs,sns,secretsmanager,dynamodb
+    DEBUG: 1
+  containerName: localstack
+  imageName: localstack/localstack:latest
+  imagePullTimeout: 60
+  containerStartTimeout: 100
+  ports:
+    - '4566:4566'
+    - '4571:4571'
+  endpoint: "http://localhost:4566"
+  resources:
+    sqs:
+      - adyen-vendor-notification
+    sns:
+      - adyen-payment-gateway-south
+    secretsManager:
+      - name: empty-secret
+      - name: key-value-secret
+        keyValues:
+          user: test
+          password: hello123
+      - name: json-test
+        plaintext: |+
+          {
+            "data":{
+              "apiKey": "test"
+            }
+          }
+    dynamoDb:
+      - tableName: firstTable
+        attributeDefinitions:
+          - attributeName: Album
+            attributeType: S
+          - attributeName: Artist
+            attributeType: S
+        keySchema:
+          - attributeName: Album
+            keyType: HASH
+          - attributeName: Artist
+            keyType: RANGE
+        provisionedThroughput:
+          readCapacityUnits: 5
+          writeCapacityUnits: 5
+        globalSecondaryIndex:
+          indexName: ArtistIndex
+          keySchema:
+            - attributeName: Artist
+              keyType: HASH
+          provisionedThroughput:
+            readCapacityUnits: 5
+            writeCapacityUnits: 5
+      - tableName: secondTable
+        attributeDefinitions:
+          - attributeName: Name
+            attributeType: S
+          - attributeName: Id
+            attributeType: S
+        keySchema:
+          - attributeName: Name
+            keyType: HASH
+          - attributeName: Id
+            keyType: RANGE
+        provisionedThroughput:
+          readCapacityUnits: 5
+          writeCapacityUnits: 5
+
+mysql:
+  enabled: true
+  containerRebuild: false
+  imageName: mysql:5.7
+  containerName: mysql
+  imagePullTimeout: 60
+  containerStartTimeout: 100
+  environment:
+    MYSQL_DATABASE: 'mydb'
+    MYSQL_ROOT_PASSWORD: 'root'
+  ports:
+    - '3306:3306'

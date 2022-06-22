@@ -48,16 +48,9 @@ dockerloader:
         - name: json-test
           plaintext: |+
             {
-              "adyen":{
+              "keys":{
                 "apiKey": "test",
                 "hmacKey": "test",
-                "mids":[
-                  {
-                   "tenant":"PSN",
-                   "currency":"USD",
-                   "mid":"PSN_USD"
-                  }
-                ]
               }
             }
 
