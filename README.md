@@ -40,16 +40,16 @@ dockerloader:
       sns:
         - sns-notification
       secretsManager:
-        - name: adyen-payment-gateway
+        - name: ket-value-secret
           keyValues:
             user: test
             password: hello123
-        - name: json-test
+        - name: json-secret
           plaintext: |+
             {
               "keys":{
-                "apiKey": "test",
-                "hmacKey": "test",
+                "key1": "test",
+                "key2": "test",
               }
             }
 
