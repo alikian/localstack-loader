@@ -89,7 +89,7 @@ dockerloader:
     containerName: mysql
     imagePullTimeout: 60
     environment:
-      MYSQL_DATABASE: 'paygateway'
+      MYSQL_DATABASE: 'mydb'
       MYSQL_ROOT_PASSWORD: 'root'
     ports:
       - '3306:3306'
