@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  MySecretA:
+    Type: 'AWS::SecretsManager::Secret'
+    Properties:
+      Name: /HeroesSecrets
+      SecretString: >
+        {
+          "github.clientId": "7cd0d12608c0fea9d820",
+          "github.clientSecret": "50d7dda611fd8cf1121abd8381f6e56a4a303fa1",
+          "google.clientId": "1091971459089-a850f6i1pj45odr0up9ag13h4v7ha03g.apps.googleusercontent.com",
+          "google.clientSecret": "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"
+        }
+
+  myDynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        -
+          AttributeName: "name"
+          AttributeType: "S"
+        -
+          AttributeName: "id"
+          AttributeType: "S"
+      KeySchema:
+        -
+          AttributeName: "id"
+          KeyType: "HASH"
+      ProvisionedThroughput:
+        ReadCapacityUnits: "5"
+        WriteCapacityUnits: "5"
+      TableName: "hero"
+      GlobalSecondaryIndexes:
+        -
+          IndexName: "myGSI"
+          KeySchema:
+            -
+              AttributeName: "name"
+              KeyType: "HASH"
+          Projection:
+            ProjectionType: "ALL"
+          ProvisionedThroughput:
+            ReadCapacityUnits: "5"
+            WriteCapacityUnits: "5"
