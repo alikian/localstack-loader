@@ -9,6 +9,9 @@ import software.amazon.awssdk.services.cloudformation.CloudFormationClient;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
 
+/**
+ * Localstack AWS Client
+ */
 public class LocalstackClientBuilder {
     LocalStackContainer localstack;
     AwsCredentialsProvider awsCredentialsProvider;
@@ -36,6 +39,10 @@ public class LocalstackClientBuilder {
                 .build();
     }
 
+    /**
+     * Get Dynamo Db Client
+     * @return DynamoDbClient
+     */
     public DynamoDbClient getDynamoDbClient(){
         return DynamoDbClient.builder()
                 .endpointOverride(localstack.getEndpoint())

@@ -66,6 +66,11 @@ public class LocalstackManager {
         String simpleCloudformationFileName = "cloudformation.yaml";
         String fullCloudformationFileName = "cloudformation.yaml";
 
+        /**
+         * Localstack Image name
+         * @param imageName
+         * @return
+         */
         public Builder withImageName(String imageName) {
             this.imageName = imageName;
             return this;
