@@ -68,14 +68,19 @@ public class LocalstackManager {
 
         /**
          * Localstack Image name
-         * @param imageName
-         * @return
+         * @param imageName localstack image name
+         * @return Builder
          */
         public Builder withImageName(String imageName) {
             this.imageName = imageName;
             return this;
         }
 
+        /**
+         * Simple doesn't have full Cloudformation capability
+         * @param simpleCloudformationFileName Simple Cloudformation FileName
+         * @return
+         */
         public Builder withSimpleCloudformation(String simpleCloudformationFileName) {
             this.simpleCloudformationFileName = simpleCloudformationFileName;
             return this;

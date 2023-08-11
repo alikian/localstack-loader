@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * AWS Resource Builder for Simple CloudFormation
+ */
 @Slf4j
 public class ResourceBuilder {
     ObjectMapper objectMapper;
