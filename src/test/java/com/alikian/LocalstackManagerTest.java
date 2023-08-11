@@ -1,21 +1,21 @@
 package com.alikian;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.apache.http.util.Asserts;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class LocalstackManagerTest {
     LocalstackManager localstackManager;
 
-    @Before
+    @BeforeEach
     public void setup() {
         localstackManager = LocalstackManager.builder().buildSimple();
     }
 
     @Test
     public void testSecretsManagers() {
-        Assert.assertNotNull(localstackManager);
-        Assert.assertNotNull(localstackManager.getSecretsManagerClient());
+        Asserts.notNull(localstackManager,"localstackManager");
+        Asserts.notNull(localstackManager.getSecretsManagerClient(),"localstackManager");
     }
 }

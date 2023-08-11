@@ -2,8 +2,6 @@ package com.alikian;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.testcontainers.containers.localstack.LocalStackContainer;
-import org.testcontainers.utility.DockerImageName;
 import software.amazon.awssdk.core.waiters.WaiterResponse;
 import software.amazon.awssdk.services.cloudformation.CloudFormationClient;
 import software.amazon.awssdk.services.cloudformation.model.CreateStackRequest;
@@ -121,7 +119,7 @@ public class LocalstackManager {
     }
 
     private void buildClients() {
-        LocalstackClientBuilder localstackClientBuilder = new LocalstackClientBuilder(localstack);
+        LocalstackClientBuilder localstackClientBuilder = new LocalstackClientBuilder(localstackDockerContainer);
         awsClients = localstackClientBuilder.buildAwsClients();
 
     }
@@ -131,18 +129,17 @@ public class LocalstackManager {
         this.simpleCloudformationFileName = simpleCloudformationFileName;
     }
 
-    private LocalStackContainer localstack;
+    private LocalstackDockerContainer localstackDockerContainer;
 
 
     private static LocalstackManager instance;
 
-    private LocalStackContainer startDocker() {
+    private LocalstackDockerContainer startDocker() {
         log.info("startDocker");
-        DockerImageName localstackImage = DockerImageName.parse(imageName);
 
-        localstack = new LocalStackContainer(localstackImage);
-        localstack.start();
-        return localstack;
+        localstackDockerContainer = new LocalstackDockerContainer(imageName);
+        localstackDockerContainer.start();
+        return localstackDockerContainer;
     }
 
 
