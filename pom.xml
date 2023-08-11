@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.alikian</groupId>
-    <artifactId>locastack-loader</artifactId>
+    <artifactId>localstack-loader</artifactId>
     <version>1.0.20-SNAPSHOT</version>
     <name>Localstack Loader</name>
     <description>A Library to simplified loading stack</description>
