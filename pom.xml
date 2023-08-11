@@ -5,6 +5,21 @@
     <groupId>io.github.alikian</groupId>
     <artifactId>locastack-loader</artifactId>
     <version>1.0.14-SNAPSHOT</version>
+    <name>Localstack Loader</name>
+    <description>A Library to simplified loading stack</description>
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://raw.githubusercontent.com/alikian/localstack-loader/main/LICENSE</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>alikian</id>
+            <name>Ali Kian</name>
+            <email>alikian@gmail.com</email>
+        </developer>
+    </developers>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
