@@ -1,4 +1,4 @@
-name: Release package to the Maven Central Repository
+name: Release
 on:
   release:
     types: [created]
