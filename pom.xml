@@ -4,7 +4,7 @@
 
     <groupId>io.github.alikian</groupId>
     <artifactId>locastack-loader</artifactId>
-    <version>1.0.16-SNAPSHOT</version>
+    <version>1.0.16</version>
     <name>Localstack Loader</name>
     <description>A Library to simplified loading stack</description>
     <licenses>
@@ -162,6 +162,6 @@
     <scm>
         <developerConnection>scm:git:https://github.com/alikian/localstack-loader</developerConnection>
         <url>https://github.com/alikian/localstack-loader</url>
-        <tag>HEAD</tag>
+        <tag>locastack-loader-1.0.16</tag>
   </scm>
 </project>
