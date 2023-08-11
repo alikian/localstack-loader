@@ -7,6 +7,7 @@
     <version>1.0.17-SNAPSHOT</version>
     <name>Localstack Loader</name>
     <description>A Library to simplified loading stack</description>
+    <url>https://github.com/alikian/localstack-loader</url>
     <licenses>
         <license>
             <name>MIT</name>
@@ -160,6 +161,7 @@
         </plugins>
     </build>
     <scm>
+        <connection>scm:git:https://github.com/alikian/localstack-loader.git</connection>
         <developerConnection>scm:git:https://github.com/alikian/localstack-loader</developerConnection>
         <url>https://github.com/alikian/localstack-loader</url>
         <tag>HEAD</tag>
