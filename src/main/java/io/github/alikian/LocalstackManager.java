@@ -1,4 +1,4 @@
-package com.alikian;
+package io.github.alikian;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -20,24 +20,43 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * LocalstackManager
+ */
 @Slf4j
 public class LocalstackManager {
     String imageName;
     String simpleCloudformationFileName;
     String fullCloudformationFileName;
 
+    /**
+     * getInstance
+     * @return LocalstackManager
+     */
     public static LocalstackManager getInstance() {
         return instance;
     }
 
+    /**
+     * Get DynamoDbClient
+     * @return DynamoDbClient
+     */
     public DynamoDbClient getDynamoDbClient() {
         return awsClients.getDynamoDbClient();
     }
 
+    /**
+     * Get AWS Secrets Manager Client
+     * @return SecretsManagerClient
+     */
     public SecretsManagerClient getSecretsManagerClient() {
         return awsClients.getSecretsManagerClient();
     }
 
+    /**
+     * Get AWS Cloudformation client
+     * @return CloudFormationClient
+     */
     public CloudFormationClient getCloudFormationClient() {
         return awsClients.getCloudFormationClient();
     }
@@ -49,14 +68,19 @@ public class LocalstackManager {
         DynamoDbClient dynamoDbClient;
     }
 
-    ;
-
     AwsClients awsClients;
 
+    /**
+     * Instantiate Builder
+     * @return Builder
+     */
     static public Builder builder() {
         return new Builder();
     }
 
+    /**
+     * Builder Class
+     */
     public static class Builder {
         private Builder() {
 
@@ -79,18 +103,27 @@ public class LocalstackManager {
         /**
          * Simple doesn't have full Cloudformation capability
          * @param simpleCloudformationFileName Simple Cloudformation FileName
-         * @return
+         * @return Builder
          */
         public Builder withSimpleCloudformation(String simpleCloudformationFileName) {
             this.simpleCloudformationFileName = simpleCloudformationFileName;
             return this;
         }
 
+        /**
+         * Full name of Cloudformation
+         * @param fullCloudformationFileName file name
+         * @return Builder
+         */
         public Builder withFullCloudformation(String fullCloudformationFileName) {
             this.fullCloudformationFileName = fullCloudformationFileName;
             return this;
         }
 
+        /**
+         * Simple Build
+         * @return LocalstackManager
+         */
         public LocalstackManager buildSimple() {
             if (instance == null) {
                 instance = new LocalstackManager(imageName, simpleCloudformationFileName);
@@ -102,6 +135,10 @@ public class LocalstackManager {
             }
         }
 
+        /**
+         * Full Cloudformation build
+         * @return LocalstackManager
+         */
         public LocalstackManager buildFull() {
             if (instance == null) {
                 instance = new LocalstackManager(imageName, fullCloudformationFileName);
@@ -136,13 +173,12 @@ public class LocalstackManager {
 
     private static LocalstackManager instance;
 
-    private LocalStackContainer startDocker() {
+    private void startDocker() {
         log.info("startDocker");
         DockerImageName localstackImage = DockerImageName.parse(imageName);
 
         localstack = new LocalStackContainer(localstackImage);
         localstack.start();
-        return localstack;
     }
 
 

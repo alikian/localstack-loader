@@ -1,7 +1,7 @@
-package com.alikian;
+package io.github.alikian;
 
-import com.alikian.aws.DynamoDBProperties;
-import com.alikian.aws.SecretManagerProperties;
+import io.github.alikian.aws.DynamoDBProperties;
+import io.github.alikian.aws.SecretManagerProperties;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -32,8 +32,7 @@ public class ResourceBuilder {
         Yaml yaml = new Yaml();
 
         try (InputStream input = getClass().getClassLoader().getResourceAsStream(cloudformationFileName)) {
-            Map cloudFormation = yaml.loadAs(input, Map.class);
-            this.cloudFormation = cloudFormation;
+            this.cloudFormation = yaml.loadAs(input, Map.class);;
             this.awsClients = awsClients;
             objectMapper = new ObjectMapper();
 //      Use this if all properties are not in the class
@@ -133,7 +132,7 @@ public class ResourceBuilder {
         return globalSecondaryIndicesAws;
     }
 
-    void createSecrets(com.alikian.aws.SecretManagerProperties secretManagerProperties) {
+    void createSecrets(SecretManagerProperties secretManagerProperties) {
         CreateSecretRequest createSecretRequest =
                 CreateSecretRequest.builder()
                         .secretString(secretManagerProperties.getSecretString())

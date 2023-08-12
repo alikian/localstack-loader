@@ -1,4 +1,4 @@
-package com.alikian.aws;
+package io.github.alikian.aws;
 
 import lombok.Data;
 

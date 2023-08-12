@@ -1,11 +1,11 @@
-package com.alikian.aws;
+package io.github.alikian.aws;
 
 import lombok.Data;
-import lombok.Setter;
-
-import java.util.List;
 import java.util.Map;
 
+/**
+ * Cloudformation Template
+ */
 @Data
 public class CloudFormation {
     private String aWSTemplateFormatVersion;
