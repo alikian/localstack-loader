@@ -13,6 +13,7 @@ import software.amazon.awssdk.services.cloudformation.model.OnFailure;
 import software.amazon.awssdk.services.cloudformation.waiters.CloudFormationWaiter;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
+import software.amazon.awssdk.services.sqs.SqsClient;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -66,6 +67,7 @@ public class LocalstackManager {
         SecretsManagerClient secretsManagerClient;
         CloudFormationClient cloudFormationClient;
         DynamoDbClient dynamoDbClient;
+        SqsClient sqsClient;
     }
 
     AwsClients awsClients;

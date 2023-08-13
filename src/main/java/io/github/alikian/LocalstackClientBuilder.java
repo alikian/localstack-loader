@@ -8,6 +8,7 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.cloudformation.CloudFormationClient;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
+import software.amazon.awssdk.services.sqs.SqsClient;
 
 /**
  * Localstack AWS Client
@@ -26,6 +27,7 @@ public class LocalstackClientBuilder {
 
     /**
      * Get SecretsManagerClient
+     *
      * @return SecretsManagerClient
      */
     public SecretsManagerClient getSecretsManagerClient() {
@@ -37,6 +39,7 @@ public class LocalstackClientBuilder {
 
     /**
      * CloudFormationClient Client
+     *
      * @return CloudFormationClient
      */
     public CloudFormationClient getCfClient() {
@@ -49,10 +52,19 @@ public class LocalstackClientBuilder {
 
     /**
      * Get Dynamo Db Client
+     *
      * @return DynamoDbClient
      */
-    public DynamoDbClient getDynamoDbClient(){
+    public DynamoDbClient getDynamoDbClient() {
         return DynamoDbClient.builder()
+                .endpointOverride(localstack.getEndpoint())
+                .region(Region.of(localstack.getRegion()))
+                .credentialsProvider(awsCredentialsProvider)
+                .build();
+    }
+
+    public SqsClient getSqsClient() {
+        return SqsClient.builder()
                 .endpointOverride(localstack.getEndpoint())
                 .region(Region.of(localstack.getRegion()))
                 .credentialsProvider(awsCredentialsProvider)
@@ -61,13 +73,15 @@ public class LocalstackClientBuilder {
 
     /**
      * Build AWS Clients
+     *
      * @return AwsClients
      */
     public LocalstackManager.AwsClients buildAwsClients() {
-        LocalstackManager.AwsClients awsClients=new LocalstackManager.AwsClients();
+        LocalstackManager.AwsClients awsClients = new LocalstackManager.AwsClients();
         awsClients.setDynamoDbClient(getDynamoDbClient());
         awsClients.setSecretsManagerClient(getSecretsManagerClient());
         awsClients.setCloudFormationClient(getCfClient());
+        awsClients.setSqsClient(getSqsClient());
         return awsClients;
     }
 }

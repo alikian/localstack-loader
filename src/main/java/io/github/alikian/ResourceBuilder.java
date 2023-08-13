@@ -1,6 +1,7 @@
 package io.github.alikian;
 
 import io.github.alikian.aws.DynamoDBProperties;
+import io.github.alikian.aws.SQSProperties;
 import io.github.alikian.aws.SecretManagerProperties;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,10 +10,13 @@ import org.yaml.snakeyaml.Yaml;
 import software.amazon.awssdk.services.dynamodb.model.*;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
 import software.amazon.awssdk.services.secretsmanager.model.CreateSecretRequest;
+import software.amazon.awssdk.services.sqs.model.CreateQueueRequest;
+import software.amazon.awssdk.services.sqs.model.QueueAttributeName;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +36,8 @@ public class ResourceBuilder {
         Yaml yaml = new Yaml();
 
         try (InputStream input = getClass().getClassLoader().getResourceAsStream(cloudformationFileName)) {
-            this.cloudFormation = yaml.loadAs(input, Map.class);;
+            this.cloudFormation = yaml.loadAs(input, Map.class);
+            ;
             this.awsClients = awsClients;
             objectMapper = new ObjectMapper();
 //      Use this if all properties are not in the class
@@ -64,8 +69,28 @@ public class ResourceBuilder {
                             = objectMapper.convertValue(properties, DynamoDBProperties.class);
                     createDynamoDBs(dynamoDBProperties);
                     break;
+                case "AWS::SQS::Queue":
+                    SQSProperties sqsProperties
+                            = objectMapper.convertValue(properties, SQSProperties.class);
+                    createSQSs(sqsProperties);
             }
         }
+    }
+
+    private void createSQSs(SQSProperties sqsProperties) {
+        Map<QueueAttributeName, String> attributes = new HashMap<>();
+        if(sqsProperties.getDeduplicationScope()!=null) {
+            attributes.put(QueueAttributeName.DEDUPLICATION_SCOPE, sqsProperties.getDeduplicationScope());
+        }
+        if (sqsProperties.getDelaySeconds() != null) {
+            attributes.put(QueueAttributeName.DELAY_SECONDS, sqsProperties.getDelaySeconds().toString());
+        }
+        CreateQueueRequest createQueueRequest = CreateQueueRequest.builder()
+                .attributes(attributes)
+                .queueName(sqsProperties.getQueueName())
+                .build();
+        awsClients.getSqsClient().createQueue(createQueueRequest);
+        log.info("SQS created: {}", sqsProperties.getQueueName());
     }
 
     private void createDynamoDBs(DynamoDBProperties ddbProperties) {
