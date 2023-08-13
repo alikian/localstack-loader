@@ -4,9 +4,10 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.alikian/localstack-loader)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22io.github.alikian%22)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://raw.githubusercontent.com/alikian/localstack-loader/main/LICENSE)
 
-
+A Library to start localstack, no spring dependencies, so it can be used with any version of spring.
 - Start localstack using testcontainer 
 - Create Resources based on cloudformation template
+- Creat AWS Clients using AWS SDK v2
 
 Create AWS resources using AWS Cloudformation template
 
