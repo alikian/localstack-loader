@@ -12,6 +12,18 @@ A Library to start localstack, no spring dependencies, so it can be used with an
 Create AWS resources using AWS Cloudformation template
 
 Example without Spring:
+
+pom.xml
+```xml
+  <dependency>
+    <groupId>io.github.alikian</groupId>
+    <artifactId>localstack-loader</artifactId>
+    <version>1.0.21</version>
+  </dependency>
+
+
+```
+
 ```java
   LocalstackManager localstackManager = LocalstackManager.builder()
                     .withFullCloudformation("test-cloudformation.yaml").buildSimple();
