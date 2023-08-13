@@ -4,11 +4,7 @@ Resources:
     Type: 'AWS::SecretsManager::Secret'
     Properties:
       Name: /HeroesSecrets
-      SecretString: >
-        {
-          "key1": "value1",
-          "key2": "value2"
-        }
+      SecretString: '{"key1":"value1","key2":"value2"}'
   MyQueue:
     Type: AWS::SQS::Queue
     Properties:

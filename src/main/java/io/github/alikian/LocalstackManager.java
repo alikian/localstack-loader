@@ -130,11 +130,10 @@ public class LocalstackManager {
             if (instance == null) {
                 instance = new LocalstackManager(imageName, simpleCloudformationFileName);
                 instance.start();
-
-                return instance;
-            } else {
-                throw new RuntimeException("Build already called");
+            }else {
+                log.warn("Build Already called, ignored this call");
             }
+            return instance;
         }
 
         /**
@@ -145,11 +144,10 @@ public class LocalstackManager {
             if (instance == null) {
                 instance = new LocalstackManager(imageName, fullCloudformationFileName);
                 instance.start();
-
-                return instance;
-            } else {
-                throw new RuntimeException("Build already called");
+            }else{
+                log.warn("Build Already called, ignored this call");
             }
+            return instance;
         }
     }
 
