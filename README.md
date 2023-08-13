@@ -7,6 +7,8 @@
 A Library to start localstack, no spring dependencies, so it can be used with any version of spring.
 - Start localstack using testcontainer 
 - Create Resources based on cloudformation template
+- - with Full Cloudformation temple, is slow (takes more 30 seconds)
+- - with Simple Cloudformation is fast but is doesn't check dependent resources, it has support for Secrets Managers, DynamoDB and SQS 
 - Creat AWS Clients using AWS SDK v2
 
 Create AWS resources using AWS Cloudformation template
