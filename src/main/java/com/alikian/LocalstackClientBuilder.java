@@ -1,5 +1,6 @@
 package com.alikian;
 
+import com.alikian.docker.DockerManager;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -12,14 +13,14 @@ import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
  * Localstack AWS Client
  */
 public class LocalstackClientBuilder {
-    LocalstackDockerContainer localstackDockerContainer;
+    DockerManager  dockerManager;
     AwsCredentialsProvider awsCredentialsProvider;
 
-    LocalstackClientBuilder(LocalstackDockerContainer localstackDockerContainer) {
-        this.localstackDockerContainer = localstackDockerContainer;
+    LocalstackClientBuilder(DockerManager dockerManager) {
+        this.dockerManager = dockerManager;
         AwsBasicCredentials awsBasicCredentials =
-                AwsBasicCredentials.create(localstackDockerContainer.getAccessKey(),
-                        localstackDockerContainer.getSecretKey());
+                AwsBasicCredentials.create(dockerManager.getAccessKey(),
+                        dockerManager.getSecretKey());
         awsCredentialsProvider = StaticCredentialsProvider.create(awsBasicCredentials);
 
     }
@@ -27,15 +28,15 @@ public class LocalstackClientBuilder {
     public SecretsManagerClient getSecretsManagerClient() {
         return SecretsManagerClient.builder()
                 .credentialsProvider(awsCredentialsProvider)
-                .region(Region.of(localstackDockerContainer.getRegion()))
-                .endpointOverride(localstackDockerContainer.getEndpoint()).build();
+                .region(dockerManager.getRegion())
+                .endpointOverride(dockerManager.getEndpointURI()).build();
     }
 
     public CloudFormationClient getCfClient() {
         return CloudFormationClient.builder().
                 credentialsProvider(awsCredentialsProvider)
-                .region(Region.of(localstackDockerContainer.getRegion()))
-                .endpointOverride(localstackDockerContainer.getEndpoint())
+                .region(dockerManager.getRegion())
+                .endpointOverride(dockerManager.getEndpointURI())
                 .build();
     }
 
@@ -45,8 +46,8 @@ public class LocalstackClientBuilder {
      */
     public DynamoDbClient getDynamoDbClient(){
         return DynamoDbClient.builder()
-                .endpointOverride(localstackDockerContainer.getEndpoint())
-                .region(Region.of(localstackDockerContainer.getRegion()))
+                .endpointOverride(dockerManager.getEndpointURI())
+                .region(dockerManager.getRegion())
                 .credentialsProvider(awsCredentialsProvider)
                 .build();
     }

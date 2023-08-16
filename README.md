@@ -6,3 +6,27 @@
 
 
 Localstack Loader
+
+Example:
+```java
+public class LocalstackManagerTest {
+    LocalstackManager localstackManager;
+
+    @BeforeEach
+    public void setup() {
+        localstackManager =
+                LocalstackManager.builder()
+                        .withRebuild(true)
+                        .withPort(4566)
+                        .withImageName("localstack/localstack:2.2.0")
+                        .buildSimple();
+    }
+
+    @Test
+    public void testSecretsManagers() {
+        Asserts.notNull(localstackManager,"localstackManager");
+        Asserts.notNull(localstackManager.getSecretsManagerClient(),"localstackManager");
+    }
+}
+
+```

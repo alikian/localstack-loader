@@ -10,7 +10,12 @@ public class LocalstackManagerTest {
 
     @BeforeEach
     public void setup() {
-        localstackManager = LocalstackManager.builder().buildSimple();
+        localstackManager =
+                LocalstackManager.builder()
+                        .withRebuild(true)
+                        .withPort(4566)
+                        .withImageName("localstack/localstack:2.2.0")
+                        .buildSimple();
     }
 
     @Test
