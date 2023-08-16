@@ -77,6 +77,9 @@ public class LocalstackManager {
         return builder;
     }
 
+    /**
+     * Builder Class
+     */
     public static class Builder {
         private Builder() {
             dockerSettings = new DockerSettings();
@@ -112,7 +115,7 @@ public class LocalstackManager {
          * Simple doesn't have full Cloudformation capability
          *
          * @param simpleCloudformationFileName Simple Cloudformation FileName
-         * @return
+         * @return Builder
          */
         public Builder withSimpleCloudformation(String simpleCloudformationFileName) {
             this.simpleCloudformationFileName = simpleCloudformationFileName;

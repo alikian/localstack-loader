@@ -26,6 +26,11 @@ public class LocalstackClientBuilder {
 
     }
 
+    /**
+     * Get SecretsManagerClient
+     *
+     * @return SecretsManagerClient
+     */
     public SecretsManagerClient getSecretsManagerClient() {
         return SecretsManagerClient.builder()
                 .credentialsProvider(awsCredentialsProvider)
@@ -33,6 +38,11 @@ public class LocalstackClientBuilder {
                 .endpointOverride(dockerManager.getEndpointURI()).build();
     }
 
+    /**
+     * CloudFormationClient Client
+     *
+     * @return CloudFormationClient
+     */
     public CloudFormationClient getCfClient() {
         return CloudFormationClient.builder().
                 credentialsProvider(awsCredentialsProvider)
@@ -61,6 +71,11 @@ public class LocalstackClientBuilder {
                 .build();
     }
 
+    /**
+     * Build AWS Clients
+     *
+     * @return AwsClients
+     */
     public LocalstackManager.AwsClients buildAwsClients() {
         LocalstackManager.AwsClients awsClients=new LocalstackManager.AwsClients();
         awsClients.setDynamoDbClient(getDynamoDbClient());
