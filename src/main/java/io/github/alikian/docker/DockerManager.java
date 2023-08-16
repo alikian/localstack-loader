@@ -211,7 +211,7 @@ public class DockerManager {
         log.info("Pinging container timeout: {}", dockerSettings.getContainerStartTimeout());
 
         for (int i = 0; i < dockerSettings.getContainerStartTimeout(); i++) {
-            boolean ping = pingURL(getEndpoint() + "health", 1000);
+            boolean ping = pingURL(getEndpoint() + "_localstack/health", 1000);
             if (ping) {
                 log.debug("Ping container success");
                 return;
