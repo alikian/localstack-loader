@@ -30,7 +30,6 @@ pom.xml
 ```java
   LocalstackManager localstackManager =
         LocalstackManager.builder()
-        .withRebuild(false)
         .withPort(4566)
         .withSimpleCloudformation("cloudformation.yaml")
         .withImageName("localstack/localstack:2.2.0")

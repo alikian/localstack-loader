@@ -32,12 +32,14 @@ public class DockerManager {
     private DockerSettings dockerSettings;
     private DockerClient dockerClient;
     private Container containerFound;
+    String runningContainerId;
     boolean started;
     // To set after resource creation completed
     boolean success;
     boolean alreadyStarted;
     boolean enabled;
     boolean containerCreated;
+
 
     public DockerManager(DockerSettings dockerSettings) {
         DefaultDockerClientConfig config = DefaultDockerClientConfig
@@ -110,31 +112,15 @@ public class DockerManager {
         if (containerFound != null) {
             log.info("Container Found name {}: {}", dockerSettings.getContainerName(), containerFound.getId());
             String state = containerFound.getState();
-            if (!containerFound.getImage().equals(dockerSettings.getImageName())) {
-                log.info("Container found with different image name, rebuilding");
-                dockerSettings.setContainerRebuild(true);
+            if ("running".equals(state)) {
+                started = true;
+                log.info("Stopping existing container {}", dockerSettings.getContainerName());
+                runningContainerId = containerFound.getId();
+                stop();
             }
-            if (dockerSettings.isContainerRebuild()) {
-                log.info("Rebuilding container {},{}", dockerSettings.getContainerName(), containerFound.getId());
-                if ("running".equals(state)) {
-                    started = true;
-                    log.info("Stopping existing container {}", dockerSettings.getContainerName());
-                    stop();
-                }
-                log.info("Deleting existing container id {}", containerFound.getId());
-                dockerClient.removeContainerCmd(containerFound.getId()).exec();
-                createAndStartContainer();
-            } else {
-                if ("exited".equals(state)) {
-                    log.info("Starting existing container {}", dockerSettings.getContainerName());
-                    dockerClient.startContainerCmd(containerFound.getId()).exec();
-                    waitForContainerToStart();
-                }
-                if ("running".equals(state)) {
-                    alreadyStarted = true;
-                    log.info("Container already running");
-                }
-            }
+            log.info("Deleting existing container id {}", containerFound.getId());
+            dockerClient.removeContainerCmd(containerFound.getId()).exec();
+            createAndStartContainer();
         } else {
 
             checkAndPullImage();
@@ -160,12 +146,12 @@ public class DockerManager {
                 .withHostConfig(HostConfig.newHostConfig().withPortBindings(ports))
                 .withName(dockerSettings.getContainerName())
                 .exec();
-        String containerId = createContainerResponse.getId();
-        dockerClient.startContainerCmd(containerId).exec();
+        runningContainerId = createContainerResponse.getId();
+        dockerClient.startContainerCmd(runningContainerId).exec();
 
         createContainerCmd.withEnv(environment);
         waitForContainerToStart();
-        log.debug("Started Container: {}", containerId);
+        log.debug("Started Container: {}", runningContainerId);
         containerCreated = true;
     }
 
@@ -201,8 +187,8 @@ public class DockerManager {
 
     public void stop() {
         if (started) {
-            log.info("Shutting down docker {}", dockerSettings.getContainerName());
-            dockerClient.stopContainerCmd(containerFound.getId()).exec();
+            log.info("Shutting down docker {}", runningContainerId);
+            dockerClient.stopContainerCmd(runningContainerId).exec();
             log.info("Stopped Container {} image: {}", dockerSettings.getContainerName(), containerFound.getId());
         }
     }

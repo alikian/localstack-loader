@@ -101,10 +101,6 @@ public class LocalstackManager {
             return this;
         }
 
-        public Builder withRebuild(boolean rebuild) {
-            this.dockerSettings.setContainerRebuild(rebuild);
-            return this;
-        }
 
         public Builder withPort(Integer port){
             this.dockerSettings.setPort(port);
@@ -168,6 +164,11 @@ public class LocalstackManager {
         if (dockerManager.isContainerCreated()) {
             createResources();
         }
+        Thread shutdownHook = new Thread(() -> {
+            log.info("Shutting down container");
+            dockerManager.stop();
+        });
+        Runtime.getRuntime().addShutdownHook(shutdownHook);
     }
 
     private void buildClients() {

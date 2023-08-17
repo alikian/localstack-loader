@@ -13,7 +13,6 @@ public class LocalstackManagerTest {
     public void setup() {
         localstackManager =
                 LocalstackManager.builder()
-                        .withRebuild(true)
                         .withPort(4566)
                         .withSimpleCloudformation("cloudformation.yaml")
                         .withImageName("localstack/localstack:2.2.0")

@@ -16,6 +16,5 @@ public class DockerSettings {
     private Integer containerStartTimeout = 60;
     private Integer port = 4566;
     private boolean enabled = true;
-    private boolean containerRebuild = true;
 
 }
