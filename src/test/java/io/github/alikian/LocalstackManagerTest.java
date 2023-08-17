@@ -11,7 +11,13 @@ public class LocalstackManagerTest {
 
     @Before
     public void setup() {
-        localstackManager = LocalstackManager.builder().buildSimple();
+        localstackManager =
+                LocalstackManager.builder()
+                        .withRebuild(true)
+                        .withPort(4566)
+                        .withSimpleCloudformation("cloudformation.yaml")
+                        .withImageName("localstack/localstack:2.2.0")
+                        .buildSimple();
     }
 
     @Test

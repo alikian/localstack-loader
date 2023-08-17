@@ -50,7 +50,7 @@ public class ResourceBuilder {
 
     }
 
-    void buildResources() {
+    public void buildResources() {
         Map<String, Object> resources = (Map<String, Object>) cloudFormation.get("Resources");
         for (Map.Entry<String, Object> entry : resources.entrySet()) {
 

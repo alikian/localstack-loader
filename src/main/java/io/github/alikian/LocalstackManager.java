@@ -1,9 +1,10 @@
 package io.github.alikian;
 
+import com.github.dockerjava.api.DockerClient;
+import io.github.alikian.docker.DockerManager;
+import io.github.alikian.docker.DockerSettings;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.testcontainers.containers.localstack.LocalStackContainer;
-import org.testcontainers.utility.DockerImageName;
 import software.amazon.awssdk.core.waiters.WaiterResponse;
 import software.amazon.awssdk.services.cloudformation.CloudFormationClient;
 import software.amazon.awssdk.services.cloudformation.model.CreateStackRequest;
@@ -21,19 +22,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-/**
- * LocalstackManager
- */
 @Slf4j
 public class LocalstackManager {
-    String imageName;
     String simpleCloudformationFileName;
     String fullCloudformationFileName;
 
-    /**
-     * getInstance
-     * @return LocalstackManager
-     */
+    DockerClient dockerClient;
+
     public static LocalstackManager getInstance() {
         return instance;
     }
@@ -70,14 +65,16 @@ public class LocalstackManager {
         SqsClient sqsClient;
     }
 
+
     AwsClients awsClients;
+    static Builder builder = new Builder();
 
     /**
      * Instantiate Builder
      * @return Builder
      */
     static public Builder builder() {
-        return new Builder();
+        return builder;
     }
 
     /**
@@ -85,25 +82,38 @@ public class LocalstackManager {
      */
     public static class Builder {
         private Builder() {
-
+            dockerSettings = new DockerSettings();
         }
 
-        String imageName = "localstack/localstack:2.2.0";
+        DockerSettings dockerSettings;
+
         String simpleCloudformationFileName = "cloudformation.yaml";
         String fullCloudformationFileName = "cloudformation.yaml";
 
         /**
          * Localstack Image name
+         *
          * @param imageName localstack image name
          * @return Builder
          */
         public Builder withImageName(String imageName) {
-            this.imageName = imageName;
+            this.dockerSettings.setImageName(imageName);
+            return this;
+        }
+
+        public Builder withRebuild(boolean rebuild) {
+            this.dockerSettings.setContainerRebuild(rebuild);
+            return this;
+        }
+
+        public Builder withPort(Integer port){
+            this.dockerSettings.setPort(port);
             return this;
         }
 
         /**
          * Simple doesn't have full Cloudformation capability
+         *
          * @param simpleCloudformationFileName Simple Cloudformation FileName
          * @return Builder
          */
@@ -128,7 +138,7 @@ public class LocalstackManager {
          */
         public LocalstackManager buildSimple() {
             if (instance == null) {
-                instance = new LocalstackManager(imageName, simpleCloudformationFileName);
+                instance = new LocalstackManager(simpleCloudformationFileName);
                 instance.start();
             }else {
                 log.warn("Build Already called, ignored this call");
@@ -142,7 +152,7 @@ public class LocalstackManager {
          */
         public LocalstackManager buildFull() {
             if (instance == null) {
-                instance = new LocalstackManager(imageName, fullCloudformationFileName);
+                instance = new LocalstackManager(fullCloudformationFileName);
                 instance.start();
             }else{
                 log.warn("Build Already called, ignored this call");
@@ -152,33 +162,32 @@ public class LocalstackManager {
     }
 
     private void start() {
-        startDocker();
+        dockerManager = new DockerManager(builder().dockerSettings);
+        dockerManager.start();
         buildClients();
-        createResources();
+        if (dockerManager.isContainerCreated()) {
+            createResources();
+        }
     }
 
     private void buildClients() {
-        LocalstackClientBuilder localstackClientBuilder = new LocalstackClientBuilder(localstack);
+        LocalstackClientBuilder localstackClientBuilder = new LocalstackClientBuilder(dockerManager);
         awsClients = localstackClientBuilder.buildAwsClients();
 
     }
 
-    private LocalstackManager(String imageName, String simpleCloudformationFileName) {
-        this.imageName = imageName;
+    private LocalstackManager(String simpleCloudformationFileName) {
         this.simpleCloudformationFileName = simpleCloudformationFileName;
     }
 
-    private LocalStackContainer localstack;
+    private DockerManager dockerManager;
 
 
     private static LocalstackManager instance;
 
-    private void startDocker() {
+    private DockerManager startDocker() {
         log.info("startDocker");
-        DockerImageName localstackImage = DockerImageName.parse(imageName);
-
-        localstack = new LocalStackContainer(localstackImage);
-        localstack.start();
+        return dockerManager;
     }
 
 

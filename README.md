@@ -20,15 +20,20 @@ pom.xml
   <dependency>
     <groupId>io.github.alikian</groupId>
     <artifactId>localstack-loader</artifactId>
-    <version>1.0.21</version>
+    <version>1.0.23</version>
   </dependency>
 
 
 ```
 
 ```java
-  LocalstackManager localstackManager = LocalstackManager.builder()
-                    .withFullCloudformation("test-cloudformation.yaml").buildSimple();
+  LocalstackManager localstackManager =
+        LocalstackManager.builder()
+        .withRebuild(false)
+        .withPort(4566)
+        .withSimpleCloudformation("cloudformation.yaml")
+        .withImageName("localstack/localstack:2.2.0")
+        .buildSimple();
   SecretsManagerClient secretsClient = localstackManager.getSecretsManagerClient();
 
 ```
@@ -50,8 +55,11 @@ import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
 @Profile({"test", "local"})
 public class AwsConfig {
 
-    LocalstackManager localstackManager = LocalstackManager.builder()
-            .withFullCloudformation("test-cloudformation.yaml").buildSimple();
+    LocalstackManager localstackManager = 
+            LocalstackManager
+                    .builder()
+                    .withSimpleCloudformation("cloudformation.yaml")
+                    .buildSimple();
 
     @Primary
     @Bean
