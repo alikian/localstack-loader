@@ -26,6 +26,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+/**
+ * @author Ali Kianzadeh
+ */
 @Data
 @Slf4j
 public class DockerManager {
@@ -41,6 +44,10 @@ public class DockerManager {
     boolean containerCreated;
 
 
+    /**
+     * Initial with settings
+     * @param dockerSettings new class
+     */
     public DockerManager(DockerSettings dockerSettings) {
         DefaultDockerClientConfig config = DefaultDockerClientConfig
                 .createDefaultConfigBuilder()
@@ -100,6 +107,9 @@ public class DockerManager {
     }
 
 
+    /**
+     * Start container
+     */
     public void start() {
 
         if (!enabled) {
@@ -155,6 +165,10 @@ public class DockerManager {
         containerCreated = true;
     }
 
+    /**
+     * Get container public port
+     * @return Ports to map
+     */
     private Ports getPorts() {
         Ports portBindings = new Ports();
         ExposedPort exposedPort = ExposedPort.tcp(4566);
@@ -162,6 +176,12 @@ public class DockerManager {
         return portBindings;
     }
 
+    /**
+     * Ping health of url
+     * @param url to check
+     * @param timeout timeout to wait
+     * @return success or failed
+     */
     public boolean pingURL(String url, int timeout) {
         log.info("pinging url:{}", url);
 
@@ -185,6 +205,9 @@ public class DockerManager {
         }
     }
 
+    /**
+     * Stop Container, should be called by exit webhook too
+     */
     public void stop() {
         if (started) {
             log.info("Shutting down docker {}", runningContainerId);
@@ -193,6 +216,9 @@ public class DockerManager {
         }
     }
 
+    /**
+     * Wait for Docker to start
+     */
     public void waitForContainerToStart() {
         log.info("Pinging container timeout: {}", dockerSettings.getContainerStartTimeout());
 
@@ -213,29 +239,45 @@ public class DockerManager {
     }
 
 
+    /**
+     * Dummy Access Key
+     * @return Access Key
+     */
     public String getAccessKey() {
-        return "123";
+        return "noop";
     }
 
+    /**
+     * Dummy Secret Key
+     * @return Secret Key
+     */
     public String getSecretKey() {
-        return "123";
+        return "noop";
     }
 
+    /**
+     *
+     * @return localstack Region
+     */
     public Region getRegion() {
         return Region.of("us-west-2");
     }
 
+    /**
+     * getEndpoint
+     * @return localstack endpoint
+     */
     public String getEndpoint() {
         return "http://localhost:" + dockerSettings.getPort() + "/";
     }
 
+    /**
+     * localstack URI
+     * @return URI
+     */
     @SneakyThrows
     public URI getEndpointURI() {
         return new URI(getEndpoint());
     }
 
-    @Override
-    protected void finalize() {
-        stop();
-    }
 }

@@ -63,6 +63,10 @@ public class LocalstackClientBuilder {
                 .build();
     }
 
+    /**
+     * Get SQS Client
+     * @return SqsClient
+     */
     public SqsClient getSqsClient() {
         return SqsClient.builder()
                 .endpointOverride(dockerManager.getEndpointURI())

@@ -22,6 +22,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * @author Ali Kianzadeh
+ */
 @Slf4j
 public class LocalstackManager {
     String simpleCloudformationFileName;
@@ -29,6 +32,10 @@ public class LocalstackManager {
 
     DockerClient dockerClient;
 
+    /**
+     * Get Instance
+     * @return LocalstackManager
+     */
     public static LocalstackManager getInstance() {
         return instance;
     }
@@ -102,6 +109,11 @@ public class LocalstackManager {
         }
 
 
+        /**
+         * Override container public port
+         * @param port port number
+         * @return Builder
+         */
         public Builder withPort(Integer port){
             this.dockerSettings.setPort(port);
             return this;
@@ -198,7 +210,7 @@ public class LocalstackManager {
     }
 
     private void createStack() {
-        String stackName = "heroes";
+        String stackName = "localstack";
         log.debug("creating stack");
         try {
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fullCloudformationFileName);
